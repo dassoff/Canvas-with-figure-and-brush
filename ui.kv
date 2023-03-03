@@ -1,0 +1,64 @@
+<Holst@Image>:
+
+<DSC>:
+    size_hint_y:None
+    rows: 2
+    size_hint_x:1
+    height:self.minimum_height
+    padding: 20
+    spacing:10
+    elevation:0
+
+MDBoxLayout:
+    orientation:'vertical'
+    MDTopAppBar:
+        title:'Квадрат'
+        elevation:0
+
+        use_overflow:True
+        right_action_items:[['palette', lambda x: app.switch_screen('main'),'Холст','Холст'],['cogs', lambda x: app.switch_screen('settings'),'Настройки','Настройки'],['delete', lambda x: app.clear_canvas(),'Очистить','Очистить']]
+    MDScreenManager:
+        id:sm
+        MDScreen:
+            name:"main"
+            MDAnchorLayout:
+                anchor_x: 'center'
+                anchor_y: 'center'
+                Holst:
+                    id:holst
+
+        MDScreen:
+            name:'settings'
+            MDScrollView:
+                MDList:
+                    OneLineAvatarIconListItem:
+                        text:'Цвета'
+                        IconLeftWidget:
+                            icon: 'eyedropper-variant'
+                        IconRightWidget:
+                            id: color_btn
+                            icon:'select-color'
+                            on_press: app.show_dialog_color()
+
+                    OneLineAvatarIconListItem:
+                        text:'Выбор режима рисования'
+                        IconLeftWidget:
+                            icon:'draw'
+                        IRightContainer:
+                            MDCheckbox:
+                                active: True if app.config.get('Pick','mode') == 'figure' else False
+                                checkbox_icon_down: 'rectangle'
+                                checkbox_icon_normal: 'pencil'
+                                on_active: app.switch_mode(self)
+
+                    OneLineAvatarIconListItem:
+                        text:'Ластик'
+                        IconLeftWidget:
+                            icon:'eraser'
+                        IconRightWidget:
+                            id: eraser
+                            icon:'eraser-variant'
+                            on_press: app.clear_line()
+
+
+
